@@ -1,4 +1,3 @@
-
 const express = require("express");
 const {getPosts, createPost} = require("../controllers/post");
 const { requireSignin} = require("../controllers/auth");//ojo amb això que fa que els posts només es puguin veure si s'ha fet loggin. video 47
