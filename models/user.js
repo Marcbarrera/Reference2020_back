@@ -1,5 +1,5 @@
-const Post = require ('../models/post');
-const uuidv1 = require ('uuid/v1');
+const mongoose =require ('mongoose');
+var uuidv1 = require('uuidv1');
 const crypto = require ('crypto');
 
 
@@ -33,7 +33,7 @@ userSchema.virtual('password')
     //crea un variable temporal anomenada _password
     this._password = password
     // genera un timestamp
-    .this.salt = uuidv1()
+    this.salt = uuidv1();
     //encriptar el password
     this.hashed_password = this.encryptPassword(password)
 })
@@ -44,6 +44,9 @@ userSchema.virtual('password')
 //mètodes
 
 userSchema.methods = {
+    authenticate: function(plainText){
+        return this.encryptPassword(plainText) === this.hashed_password
+    },
     encryptPassword: function(password) {
         if(!password) return "";
         try {
