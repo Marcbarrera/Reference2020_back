@@ -1,4 +1,5 @@
 const mongoose =require ('mongoose')
+const {ObjectId} = mongoose.Schema
 
 const postSchema = new mongoose.Schema ({
     title: {
@@ -10,6 +11,18 @@ const postSchema = new mongoose.Schema ({
         type: String,
         required: "true",
     
+    },
+    photo: {
+        type: Buffer,
+        contentType: String
+    },
+    postedBy: {
+        type: ObjectId,
+        ref: "User" // Aqui és on es dur a terme el populate. La relacio entre els posts i els usuaris
+    },
+    created: {
+        type: Date,
+        default: Date.now
     }
 });
 
