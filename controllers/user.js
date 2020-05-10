@@ -29,7 +29,7 @@ exports.allUsers = (req, res) => {
                 error: err
             })
         }
-        res.json({ users  });
+        res.json( users); // estrets els curly braces per a que el map dels usuaris funcioni al front end
     }).select("name email update created"); //important. Mostra nomes el que hi ha dins de select. Els altres camps dels users no es mostraran si no estan dins select
 };
 
