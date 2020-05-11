@@ -23,8 +23,17 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    updated: Date
-})
+    bio: {
+        type: String,
+        default: ""
+
+    },
+    updated: Date,
+    photo: {
+        data: Buffer,
+        contentType: String
+    }
+});
 
 // virtual field
 
