@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema({
         trim: true,
         required: true,
     },
+    last_name:{
+        type: String,
+        trim: true,
+    },
     email: {
         type: String,
         trim: true,
@@ -29,7 +33,30 @@ const userSchema = new mongoose.Schema({
         default: ""
 
     },
-    minibio:{
+    mini_description:{
+        type: String,
+        trim:true
+    },
+    genre:{
+        type:String
+    },
+    facebook:{
+        type: String,
+        trim:true
+    },
+    twitter:{
+        type: String,
+        trim:true
+    },
+    Instagram:{
+        type: String,
+        trim:true
+    },
+    youtube:{
+        type: String,
+        trim:true
+    },
+    Linkedin:{
         type: String,
         trim:true
     },
