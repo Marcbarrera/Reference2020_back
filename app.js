@@ -37,9 +37,9 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
 app.use(cors());
-app.use("/", postRoutes);
-app.use("/", authRoutes);
-app.use("/", userRoutes);
+app.use("/api", postRoutes);
+app.use("/api", authRoutes);
+app.use("/api", userRoutes);
 app.use(function(err, req, res, next){ //ojo! error per si no s'ha fet signin abans de crear un post
     if (err.name === "UnauthorizedError") {
         res.status(401).json({error: "Unauthorized"});

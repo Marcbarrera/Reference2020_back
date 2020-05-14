@@ -48,7 +48,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim:true
     },
-    Instagram:{
+    instagram:{
         type: String,
         trim:true
     },
