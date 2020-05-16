@@ -23,16 +23,16 @@ exports.getPosts = (req, res) => {
    const posts = Post.find()
    .populate("postedBy", "_id name")
    .select("_id title body")
-   .then((posts) => {
+   .then(posts => {
        res.json({posts});
    })
    .catch(err => console.log(err));
 };
 
 exports.createPost = (req, res, next) => {
-    let form = new formidable.IncomingForm()
+    let form = new formidable.IncomingForm();
     form.keepExtensions = true
-    form.parse(req, (err, fields, files) =>{
+    form.parse(req, (err, fields, files) => {
         if(err) {
             return res.status(400).json({
                 error: "Image could not be uploaded"
@@ -40,36 +40,38 @@ exports.createPost = (req, res, next) => {
         }
         let post = new Post (fields);
 
-        user.hashed_password = undefined; //per a no mostrar la contraseña quan es fa get a un user concret i el mateix amb el salt.
-        user.salt = undefined;
+        req.profile.hashed_password = undefined; //per a no mostrar la contraseña quan es fa get a un user concret i el mateix amb el salt.
+        req.profile.salt = undefined; //aqui estava l'error
         post.postedBy = req.profile
+
         if(files.photo){
-            post.photo.data = fs.readFileSync(files.photo.path)
-            post.photo.contentType = files.photo.type
+            post.photo.data = fs.readFileSync(files.photo.path);
+            post.photo.contentType = files.photo.type;
         }
         post.save((err, result) => {
             if(err) {
                 return res.status(400).json({
-                    error: err
+                    error: err // aqui també estava l'error
                 })
             }
             res.json(result)
         })
     })
-    const post = new Post(req.body);
-    post.save()
-    .then(result => {
-        res.json({
-            post: result
-        });
-    });
+    // const post = new Post(req.body);
+    // post.save()
+    // .then(result => {
+    //     res.json({
+    //         post: result
+    //     });
+    // });
 };
 
 exports.postsByUser = (req, res) => {
     Post.find({postedBy: req.profile._id})
         .populate("postedBy", "_id name")
+        .select('_id title body created likes')
         .sort("_created")
-        .exec((err, post) => {
+        .exec((err, posts) => {
             if (err) {
                 return res.status(400).json({
                     error: err

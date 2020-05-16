@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config()
 const expressJwt = require ('express-jwt') // ojo amb això pq jo vull que els post es puguin veure sense fer signin VIDEO 47
 const User = require ('../models/user');
+const _ = require('lodash');
+
 
 
 
