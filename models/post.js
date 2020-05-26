@@ -1,31 +1,41 @@
-const mongoose =require ('mongoose')
-const {ObjectId} = mongoose.Schema
 
-const postSchema = new mongoose.Schema ({
+const mongoose = require('mongoose');
+const { ObjectId } = mongoose.Schema;
+
+const postSchema = new mongoose.Schema({
     title: {
         type: String,
-        required: "true"
-        
+        required: true
     },
     body: {
         type: String,
-        required: "true"
-    
+        required: true
     },
-    photo: {
+    photo1: {
         data: Buffer,
-        contentType: String
+        contenType: String
     },
-
+    photo2: {
+        data: Buffer,
+        contenType: String
+    },
     postedBy: {
         type: ObjectId,
         ref: 'User'
-    },// Aqui és on es dur a terme el populate. La relacio entre els posts i els usuaris
-    
+    },
     created: {
         type: Date,
         default: Date.now
-    }
+    },
+    updated: Date,
+    likes: [{ type: ObjectId, ref: 'User' }],
+    comments: [
+        {
+            text: String,
+            created: { type: Date, default: Date.now },
+            postedBy: { type: ObjectId, ref: 'User' }
+        }
+    ]
 });
 
-module.exports = mongoose.model("Post", postSchema);
+module.exports = mongoose.model('Post', postSchema);

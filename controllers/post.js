@@ -14,63 +14,100 @@ exports.postById = (req, res, next, id) => {
 
                 });
             }
-            req.post = posts;
+            req.post = post;
             next();
         })
-}
+};
 
 exports.getPosts = (req, res) => {
-   const posts = Post.find()
-   .populate("postedBy", "_id name")
-   .select("_id title body")
-   .then(posts => {
-       res.json({posts});
-   })
-   .catch(err => console.log(err));
+    const posts = Post.find()
+        .populate("postedBy", "_id name")
+        .select("_id title body created ")
+        .sort({ created: -1 })
+        .then(posts => {
+            res.json(posts);
+        })
+        .catch(err => console.log(err));
 };
+
+// exports.createPost = (req, res, next) => {
+//     let form = new formidable.IncomingForm();
+//     form.keepExtensions = true
+//     form.parse(req, (err, fields, files) => {
+//         if(err) {
+//             return res.status(400).json({
+//                 error: "Image could not be uploaded"
+//             })
+//         }
+//         let post = new Post (fields);
+
+//         req.profile.hashed_password = undefined; //per a no mostrar la contraseña quan es fa get a un user concret i el mateix amb el salt.
+//         req.profile.salt = undefined; //aqui estava l'error
+//         post.postedBy = req.profile
+
+//         if(files.photo){
+//             post.photo.data = fs.readFileSync(files.photo.path);
+//             post.photo.contentType = files.photo.type;
+//         }
+//         post.save((err, result) => {
+//             if(err) {
+//                 return res.status(400).json({
+//                     error: err // aqui també estava l'error
+//                 })
+//             }
+//             res.json(result);
+//         })
+//     })
+//     // const post = new Post(req.body);
+//     // post.save()
+//     // .then(result => {
+//     //     res.json({
+//     //         post: result
+//     //     });
+//     // });
+// };
 
 exports.createPost = (req, res, next) => {
     let form = new formidable.IncomingForm();
-    form.keepExtensions = true
+    form.keepExtensions = true;
     form.parse(req, (err, fields, files) => {
-        if(err) {
+        if (err) {
             return res.status(400).json({
-                error: "Image could not be uploaded"
-            })
+                error: 'Image could not be uploaded'
+            });
         }
-        let post = new Post (fields);
+        let post = new Post(fields);
 
-        req.profile.hashed_password = undefined; //per a no mostrar la contraseña quan es fa get a un user concret i el mateix amb el salt.
-        req.profile.salt = undefined; //aqui estava l'error
-        post.postedBy = req.profile
+        req.profile.hashed_password = undefined;
+        req.profile.salt = undefined;
+        post.postedBy = req.profile;
 
-        if(files.photo){
-            post.photo.data = fs.readFileSync(files.photo.path);
-            post.photo.contentType = files.photo.type;
+        if (files.photo1)  {
+            post.photo1.data = fs.readFileSync(files.photo1.path);
+            post.photo1.contentType = files.photo1.type;
+        }
+        else if (files.photo2) {
+            post.photo2.data = fs.readFileSync(files.photo2.path);
+            post.photo2.contentType = files.photo2.type;
         }
         post.save((err, result) => {
-            if(err) {
+            if (err) {
                 return res.status(400).json({
-                    error: err // aqui també estava l'error
-                })
+                    error: err
+                });
             }
-            res.json(result)
-        })
-    })
-    // const post = new Post(req.body);
-    // post.save()
-    // .then(result => {
-    //     res.json({
-    //         post: result
-    //     });
-    // });
+            res.json(result);
+        });
+    });
 };
+
+
 
 exports.postsByUser = (req, res) => {
     Post.find({postedBy: req.profile._id})
         .populate("postedBy", "_id name")
-        .select('_id title body created likes')
-        .sort("_created")
+        .select('_id title body created ')
+          .sort("_created")
         .exec((err, posts) => {
             if (err) {
                 return res.status(400).json({
@@ -118,3 +155,18 @@ exports.deletePost = (req, res) => {
         })
     })
 }
+
+exports.photo1 = (req, res, next) => {
+    res.set("Content-Type", req.post.photo1.contentType);
+    return res.send(req.post.photo1.data);
+};
+
+exports.photo2 = (req, res, next) => {
+    res.set("Content-Type", req.post.photo2.contentType);
+    return res.send(req.post.photo2.data);
+};
+
+
+exports.singlePost = (req, res) => {
+    return res.json(req.post);
+};

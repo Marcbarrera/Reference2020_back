@@ -1,17 +1,24 @@
 const express = require("express");
-const {getPosts, createPost, postsByUser, postById, isPoster,updatePost, deletePost } = require("../controllers/post");
+const {getPosts, createPost, postsByUser, postById, isPoster, updatePost, deletePost, photo1, photo2, singlePost } = require("../controllers/post");
 const { requireSignin} = require("../controllers/auth");//ojo amb això que fa que els posts només es puguin veure si s'ha fet loggin. 
 const { userById } = require("../controllers/user");
 const {createPostValidator} = require('../validator')
 
 const router = express.Router();
 
-router.get("/", getPosts); //requireSignin-> veure els post nomes si s'ha fet signin. Actualitzacio. s'ha passat el middleware a crear post
+// router.get("/", getPosts); //requireSignin-> veure els post nomes si s'ha fet signin. Actualitzacio. s'ha passat el middleware a crear post
+router.get("/posts", getPosts);
 
-router.post("/post/new/:userId", requireSignin, createPost, createPostValidator);
-router.get("/posts/by/userId",requireSignin, postsByUser) //ojo requireSignin
-router.put('/post:postId', requireSignin, isPoster, updatePost)
-router.delete('/post:postId', requireSignin, isPoster, deletePost)
+router.post('/post/new/:userId', requireSignin, createPost, createPostValidator);
+router.get('/posts/by/:userId', requireSignin, postsByUser);
+router.get('/post/:postId', singlePost);
+router.put('/post/:postId', requireSignin, isPoster, updatePost);
+router.delete('/post/:postId', requireSignin, isPoster, deletePost);
+
+
+router.get("/post/photo1/:postId", photo1);
+router.get("/post/photo2/:postId", photo2);
+
 
 
 
