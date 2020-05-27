@@ -11,6 +11,7 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    category: String,
     photo1: {
         data: Buffer,
         contenType: String
@@ -18,11 +19,6 @@ const postSchema = new mongoose.Schema({
     photo2: {
         data: Buffer,
         contenType: String
-    },
-    category: {
-        type: String,
-        required: true
-
     },
     postedBy: {
         type: ObjectId,

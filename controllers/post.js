@@ -22,7 +22,7 @@ exports.postById = (req, res, next, id) => {
 exports.getPosts = (req, res) => {
     const posts = Post.find()
         .populate("postedBy", "_id name")
-        .select("_id title body created ")
+        .select("_id title body created category ")
         .sort({ created: -1 })
         .then(posts => {
             res.json(posts);
@@ -70,6 +70,8 @@ exports.getPosts = (req, res) => {
 exports.createPost = (req, res, next) => {
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
+    console.log(form)
+    console.log(req.body)
     form.parse(req, (err, fields, files) => {
         if (err) {
             return res.status(400).json({
@@ -77,7 +79,6 @@ exports.createPost = (req, res, next) => {
             });
         }
         let post = new Post(fields);
-
         req.profile.hashed_password = undefined;
         req.profile.salt = undefined;
         post.postedBy = req.profile;
@@ -86,7 +87,7 @@ exports.createPost = (req, res, next) => {
             post.photo1.data = fs.readFileSync(files.photo1.path);
             post.photo1.contentType = files.photo1.type;
         }
-        else if (files.photo2) {
+        if (files.photo2) {
             post.photo2.data = fs.readFileSync(files.photo2.path);
             post.photo2.contentType = files.photo2.type;
         }
@@ -99,6 +100,24 @@ exports.createPost = (req, res, next) => {
             res.json(result);
         });
     });
+};
+
+exports.addPhoto = (req, res, next) => {
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            return res.status(400).json({
+                error: 'Image could not be uploaded'
+            });
+        }
+        post.photo1.data = fs.readFileSync(files.preorder.path);
+        post.photo1.contentType = files.preorder.type;
+       console.log(files.preorder)
+       res.status(200).json({image: files.preorder})
+    });
+
+    // });
 };
 
 
