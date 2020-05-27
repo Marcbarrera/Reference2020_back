@@ -22,7 +22,7 @@ exports.postById = (req, res, next, id) => {
 exports.getPosts = (req, res) => {
     const posts = Post.find()
         .populate("postedBy", "_id name")
-        .select("_id title body created category ")
+        .select("_id title body created category target_content photo_target")
         .sort({ created: -1 })
         .then(posts => {
             res.json(posts);
@@ -90,6 +90,14 @@ exports.createPost = (req, res, next) => {
         if (files.photo2) {
             post.photo2.data = fs.readFileSync(files.photo2.path);
             post.photo2.contentType = files.photo2.type;
+        }
+        if (files.photo_target) {
+            post.photo_target.data = fs.readFileSync(files.photo_target.path);
+            post.photo_target.contentType = files.photo_target.type;
+        }
+        if (files.photo_reference) {
+            post.photo_reference.data = fs.readFileSync(files.photo_reference.path);
+            post.photo_reference.contentType = files.photo_reference.type;
         }
         post.save((err, result) => {
             if (err) {
@@ -185,6 +193,15 @@ exports.photo2 = (req, res, next) => {
     return res.send(req.post.photo2.data);
 };
 
+exports.photo_target = (req, res, next) => {
+    res.set("Content-Type", req.post.photo_target.contentType);
+    return res.send(req.post.photo_target.data);
+};
+
+exports.photo_reference = (req, res, next) => {
+    res.set("Content-Type", req.post.photo_reference.contentType);
+    return res.send(req.post.photo_reference.data);
+};
 
 exports.singlePost = (req, res) => {
     return res.json(req.post);

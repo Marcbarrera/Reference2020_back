@@ -1,5 +1,5 @@
 const express = require("express");
-const {getPosts, addPhoto, createPost, postsByUser, postById, isPoster, updatePost, deletePost, photo1, photo2, singlePost } = require("../controllers/post");
+const {getPosts, addPhoto, createPost, postsByUser, postById, isPoster, updatePost, deletePost, photo1, photo2, photo_target, photo_reference, singlePost } = require("../controllers/post");
 const { requireSignin} = require("../controllers/auth");//ojo amb això que fa que els posts només es puguin veure si s'ha fet loggin. 
 const { userById } = require("../controllers/user");
 const {createPostValidator} = require('../validator')
@@ -19,6 +19,8 @@ router.delete('/post/:postId', requireSignin, isPoster, deletePost);
 
 router.get("/post/photo1/:postId", photo1);
 router.get("/post/photo2/:postId", photo2);
+router.get("/post/photo_target/:postId", photo_target);
+router.get("/post/photo_target/:postId", photo_reference);
 
 
 

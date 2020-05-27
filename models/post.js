@@ -12,11 +12,20 @@ const postSchema = new mongoose.Schema({
         required: true
     },
     category: String,
+    target_content: String,
     photo1: {
         data: Buffer,
         contenType: String
     },
     photo2: {
+        data: Buffer,
+        contenType: String
+    },
+    photo_target: {
+        data: Buffer,
+        contenType: String
+    },
+    photo_reference: {
         data: Buffer,
         contenType: String
     },
