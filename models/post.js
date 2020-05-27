@@ -19,6 +19,11 @@ const postSchema = new mongoose.Schema({
         data: Buffer,
         contenType: String
     },
+    category: {
+        type: String,
+        required: true
+
+    },
     postedBy: {
         type: ObjectId,
         ref: 'User'
