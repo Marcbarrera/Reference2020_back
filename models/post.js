@@ -13,6 +13,9 @@ const postSchema = new mongoose.Schema({
     },
     category: String,
     target_content: String,
+    reference_content: String,
+    youtube_target: String,
+    youtube_reference: String,
     photo1: {
         data: Buffer,
         contenType: String
